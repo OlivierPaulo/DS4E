@@ -7,7 +7,7 @@ fb   = [ 18, 209.0  ]
 
 portfolio = [ aapl, goog, tsla, fb ]
 
-#print(portfolio[3])
+print(portfolio[3][0])
 #            AAPL     GOOG    TSLA      FB
 market  = [ 198.84, 1217.93, 267.66, 179.06 ]
 pnl = 0
