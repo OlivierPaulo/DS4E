@@ -9,6 +9,6 @@ def forward_price(spot, interest_rate, time):
 def short_pnl(positions, mtm):
     pnl = 0
     for i in range(len(positions)):
-        pnl += positions[i] - mtm[i]
+        pnl += mtm[i] - positions[i]
     return pnl
         
