@@ -14,11 +14,13 @@ import seaborn as sns
 
 ## 2.1 MinMaxScaler  
   
-```from sklearn.preprocessing import MinMaxScaler```  
-```normalizer = MinMaxScaler()```  
-```normalizer.fit(df[['columns']])```  
-```df['columns'] = normalizer.transform(df[['columns']])```  
-  
+```python
+from sklearn.preprocessing import MinMaxScaler
+normalizer = MinMaxScaler() 
+normalizer.fit(df[['columns']])
+df['columns'] = normalizer.transform(df[['columns']])
+```
+
 ## 2.2 RobustScaler  
 
 
@@ -29,11 +31,10 @@ import seaborn as sns
   
 ## 4.1 Training Split  
 
-```from sklearn.model_selection import train_test_split```  
-```X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.3) #Define **X**,**y** first```  
-  
-
-  
+```python
+from sklearn.model_selection import train_test_split  
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.3) #Define **X**,**y** first
+```  
   
 # 5. Model   
 
@@ -43,9 +44,11 @@ import seaborn as sns
   
 ### 5.1.2 KNNRegressor  
   
-```from sklearn.neighbors import KNeighborsRegressor```  
-```neigh = KNeighborsRegressor(n_neighbors=2)``` #fix k value inside *n_neighbors* parameter  
-```neigh.fit(X, y)```  
+```python
+from sklearn.neighbors import KNeighborsRegressor 
+neigh = KNeighborsRegressor(n_neighbors=2)  #fix k value inside *n_neighbors* parameter  
+neigh.fit(X, y)
+```  
 
 
 
@@ -61,10 +64,14 @@ import seaborn as sns
   
 ## 6.1 Grid Search  
   
-```from sklearn.model_selection import GridSearchCV```  
+```python
+from sklearn.model_selection import GridSearchCV
+```  
   
   
 ## 6.2 Random Search  
   
-```from sklearn.model_selection import RandomizedSearchCV```  
+```python
+from sklearn.model_selection import RandomizedSearchCV
+```  
 
