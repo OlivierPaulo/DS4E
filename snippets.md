@@ -25,6 +25,18 @@ df['columns'] = normalizer.transform(df[['columns']])
 
 ## 2.2 RobustScaler  
 
+```python
+from sklearn.preprocessing import RobustScaler
+
+# Instanciate Robust Scaler
+r_scaler = RobustScaler()
+
+# Fit scaler to feature
+r_scaler.fit(df[['columns']])
+
+# Scale
+df['columns'] = r_scaler.transform(df[['columns']])
+```
 
 # 3. Encoding
 
