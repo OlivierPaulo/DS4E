@@ -24,16 +24,21 @@ df['columns'] = normalizer.transform(df[['columns']])
 ## 2.2 RobustScaler  
 
 
-## 3. Encoding
+# 3. Encoding
+
+## 3.1 Label Encode
+
+## 3.2 OneHotEncode
 
 
 # 4. HoldOut  
   
 ## 4.1 Training Split  
 
+> Define **X**,**y** first
 ```python
 from sklearn.model_selection import train_test_split  
-X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.3) #Define **X**,**y** first
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.3) #X, y used here
 ```  
   
 # 5. Model   
