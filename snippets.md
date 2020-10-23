@@ -28,7 +28,7 @@ df['columns'] = normalizer.transform(df[['columns']])
 
 # 3. Encoding
 
-## 3.1 Label Encode
+## 3.1 Label Encoder
 
 ```python
 from sklearn.preprocessing import LabelEncoder
@@ -37,7 +37,7 @@ le.fit(df['column'])
 df['column'] = le.transform(df['column'])
 ```
 
-## 3.2 OneHotEncode
+## 3.2 OneHotEncoder
 
 ```python
 from sklearn.preprocessing import OneHotEncoder
