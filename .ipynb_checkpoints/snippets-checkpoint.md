@@ -1,3 +1,5 @@
+![ML Map](https://kitt.lewagon.com/karr/data-lectures.kitt/img/machine-learning/MLMap.png)
+
 # 1. Importing basics 
 ```python
 import pandas as pd
