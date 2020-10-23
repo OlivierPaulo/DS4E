@@ -30,8 +30,24 @@ df['columns'] = normalizer.transform(df[['columns']])
 
 ## 3.1 Label Encode
 
+```python
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+le.fit(df['column'])
+df['column'] = le.transform(df['column'])
+```
+
 ## 3.2 OneHotEncode
 
+```python
+from sklearn.preprocessing import OneHotEncoder
+
+ohe = OneHotEncoder(sparse = False)
+ohe.fit(df[['columns']])
+oh = ohe.transform(df[['columns']])
+
+df["column1"],df["column2"],df['column3'] = oh.T
+```
 
 # 4. HoldOut  
   
