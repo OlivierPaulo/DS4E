@@ -130,7 +130,7 @@ knn_class = KNeighborsClassifier()
 grid = {'n_neighbors':[5,10,20,30]}  ## => Hyperparameter Grid
 grid_search = GridSearchCV(knn_class, grid, scoring = 'accuracy', cv = 5, n_jobs=-1) # paralellize computation 
 grid_search.fit(X_train,y_train);
-print(f"1. Best Score :  {grid_search.best_score_}")  ## => bEST Score regarding scoring defined above
+print(f"1. Best Score :  {grid_search.best_score_}")  ## => Best Score regarding scoring defined above
 print(f"2. Params (K):{grid_search.best_params_}")
 print(f"3. Best Estimator : {grid_search.best_estimator_}")
 ```  
