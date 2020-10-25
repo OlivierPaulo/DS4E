@@ -95,9 +95,6 @@ neigh.score(X_test,y_test)  ## => Require X_test, y_test from Hold Out method
 neigh.predict(new_X) ## => new_X : vector of feature to predict
 ```  
 
-
-
-
 ## 5.2 Classification 
   
 ### 5.2.1 LogisticRegression  
@@ -151,3 +148,42 @@ print(f"2. Params (K):{random_search.best_params_}")  ## => Best params
 print(f"3. Best Estimator : {random_search.best_estimator_}")  
 ```  
 
+# 7. Data Sourcing
+## 7.1 API
+
+```python
+import requests
+
+BASE_URI = "<insert base URI/URL>" ## => Look into API Documentation to find BASE_URI
+path = "<insert path>" ## => Look into API Documentation to find path of requested data
+params = {
+    'query': <insert query>,
+    'format': 'json'  ## => if needed to specify the format for the API call
+}
+response = requests.get(BASE_URI+path, params).json()
+```
+
+## 7.2 Web Scraping
+
+```python
+import requests
+from bs4 import BeautifulSoup
+
+BASE_URI = "<insert base URI/URL>" ## => Place the URL you want to Scrape
+path = "<insert path>" ## => behind URL if needed to scrape several pages for example
+response = requests.get(BASE_URI+path, headers={"<Put some headers>"})  ## => headers could be needed to specify language content in return
+soup = BeautifulSoup(response.content, "html.parser")
+
+## iterate inside soup to find the corresponding tag in which is stored the desired content.
+## Example below for books
+for book in soup.find_all("article", class_="product_pod"):
+    title = book.find("h3").find("a").string
+    price = float(book.find(class_="price_color").string.strip('£'))
+    for rate, value in ratings.items():
+        if book.find(class_="star-rating "+rate) != None:
+            rating = value
+    title_list.append(title)
+    price_list.append(price)
+    rating_list.append(rating)
+
+```
