@@ -1,4 +1,5 @@
 ![ML Map](./MLMap.png)
+![ML Decision Sheet](./ml_cheat_sheet.png)
 
 # 1. Importing basics 
 ```python
