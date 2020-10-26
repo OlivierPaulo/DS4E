@@ -150,7 +150,7 @@ print(f"3. Best Estimator : {random_search.best_estimator_}")
 ```  
 
 # 7. Pipeline
-
+## 7.1 Pipeline Example
 ```python
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
@@ -162,6 +162,21 @@ pipe = Pipeline([
 ])
 
 pipe.fit_transform(data[['age']])
+```
+## 7.2 Export Pipeline and model "Pickle"
+
+```python
+import pickle
+
+# Export pipeline as pickle file
+with open("pipeline.pkl", "wb") as file:
+    pickle.dump(tuned_pipe, file )
+
+# Load pipeline from pickle file
+my_pipeline = pickle.load(open("pipeline.pkl","rb"))
+my_pipeline
+my_pipeline.predict(X_test.iloc[0:1])
+
 ```
 
 # 8. Data Sourcing
