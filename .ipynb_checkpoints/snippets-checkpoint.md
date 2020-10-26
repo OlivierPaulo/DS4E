@@ -149,8 +149,23 @@ print(f"2. Params (K):{random_search.best_params_}")  ## => Best params
 print(f"3. Best Estimator : {random_search.best_estimator_}")  
 ```  
 
-# 7. Data Sourcing
-## 7.1 API
+# 7. Pipeline
+
+```python
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.impute import SimpleImputer
+
+pipe = Pipeline([
+    ('imputer', SimpleImputer()),
+    ('scaling', MinMaxScaler())
+])
+
+pipe.fit_transform(data[['age']])
+```
+
+# 8. Data Sourcing
+## 8.1 API
 
 ```python
 import requests
@@ -164,7 +179,7 @@ params = {
 response = requests.get(BASE_URI+path, params).json()
 ```
 
-## 7.2 Web Scraping
+## 8.2 Web Scraping
 
 ```python
 import requests
