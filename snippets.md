@@ -1,5 +1,4 @@
 ![ML Map](./MLMap.png)
-![ML Decision Sheet](./ml_cheat_sheet.png)
 
 # 1. Importing basics 
 ```python
@@ -72,7 +71,13 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.3) #X, y used here
 ```  
   
-# 5. Supervised Learning Model   
+
+# 5. Machine Learning 
+
+![ML Decision Sheet](./ml_cheat_sheet.png)
+
+
+# Supervised Learning Model   
 
 ## 5.1 Regression  
   
@@ -116,6 +121,24 @@ kneigh.fit(X_train, y_train)  ## => Require X_train, y_train from Hold Out metho
 kneigh.score(X_test,y_test)  ## => Require X_test, y_test from Hold Out method
 kneigh.predict(new_X) ## => new_X : vector of feature to predict
 ```
+
+# Un-Supervised Learning Model   
+
+## 5.3 Principal Component Analysis (PCA)
+
+To complete...
+
+## 5.4 Clustering with K-Means algorithm
+
+To complete...
+
+## 5.5 Time Series (ARIMA, SARIMA, SARIMAX)
+
+To complete...
+
+## 5.6 Natural Language Processing
+
+To complete...
 
 # 6 Model Tuning  
   
@@ -179,7 +202,10 @@ my_pipeline.predict(X_test.iloc[0:1])
 
 ```
 
+
 # 8. Deep Learning
+
+![ML vs DL](./ML_vs_DL.png)
 
 ## 8.1 Standard NN models
 
