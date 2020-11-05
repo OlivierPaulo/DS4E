@@ -72,7 +72,7 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.3) #X, y used here
 ```  
   
-# 5. Model   
+# 5. Supervised Learning Model   
 
 ## 5.1 Regression  
   
@@ -216,5 +216,22 @@ for book in soup.find_all("article", class_="product_pod"):
     title_list.append(title)
     price_list.append(price)
     rating_list.append(rating)
+
+```
+
+## Others
+
+### Checking values to JSON file
+
+```python
+
+import json
+check_values = {col:df[col].value_counts().tolist() for col in df.columns} ## the DataFrame is called 'df' here
+
+#for col in df.columns:
+#    print(f"Col : {col} \n {df[col].value_counts()}")
+
+with open('check_values.json', 'w') as outfile:
+    json.dump(check_values, outfile)
 
 ```

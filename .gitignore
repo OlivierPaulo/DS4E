@@ -1,0 +1,2 @@
+#ignore the Notebook cache file
+*.ipynb_checkpoints/*
