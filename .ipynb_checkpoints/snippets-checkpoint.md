@@ -179,8 +179,428 @@ my_pipeline.predict(X_test.iloc[0:1])
 
 ```
 
-# 8. Data Sourcing
-## 8.1 API
+# 8. Deep Learning
+
+## 8.1 Standard NN models
+
+Cleaning Data, Scaling features, Train/Test Split could be needed before building the model.
+
+### 8.1.1 Regression
+
+```python
+
+#Init model
+
+from tensorflow.keras import Sequential, layers
+
+model = Sequential()
+model.add(layers.Dense(50, activation='relu', input_shape=(x1,x2,x3))) # put the dimensions of X.shape for x1,x2,x3 
+model.add(layers.Dense(25, activation='relu')) # ReLU activation is the prefered default activation fonction
+model.add(layers.Dense(25, activation='relu'))
+model.add(layers.Dense(10, activation='relu'))
+model.add(layers.Dense(1, activation='linear')) # put the numbers of targeted value expected. Here is the linear activation for Regression
+
+#Compile model
+model.compile(loss='mse',          # The loss is calculated with the MSE function
+              optimizer='adam',    # Adam optimizer is the default prefered optimizer for this task.
+              metrics=['mae'])     # Mean Absolute Error is metric of the model "accuracy"
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+
+```
+
+### 8.1.2 Classification (2 Classes)
+
+```python
+
+#Init model
+
+from tensorflow.keras import Sequential, layers
+
+model = Sequential()
+model.add(layers.Dense(50, activation='relu', input_shape=(x1,x2,x3))) # put the dimensions of X.shape for x1,x2,x3 
+model.add(layers.Dense(25, activation='relu')) # ReLU activation is the prefered default activation fonction
+model.add(layers.Dense(25, activation='relu'))
+model.add(layers.Dense(10, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid')) # Activation could be softmax with 2 neurones.
+
+#Compile model
+model.compile(loss='binary_crossentropy',  # The loss is calculated with the binary_crossentropy parameter
+              optimizer='adam',            
+              metrics=['accuracy'])
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+
+```
+
+### 8.1.3 Multi-Classification (more than 2 Classes)
+
+```python
+
+#Init model
+
+from tensorflow.keras import Sequential, layers
+
+model = Sequential()
+model.add(layers.Dense(50, activation='relu', input_shape=(x1,x2,x3))) # put the dimensions of X.shape for x1,x2,x3 
+model.add(layers.Dense(25, activation='relu')) # ReLU activation is the prefered default activation fonction
+model.add(layers.Dense(25, activation='relu'))
+model.add(layers.Dense(10, activation='relu'))
+model.add(layers.Dense(5, activation='softmax')) # Number of neurones correspond to the number of categorical values to classify
+
+#Compile model
+model.compile(loss='categorical_crossentropy',   # The loss is calculated with the categorical_crossentropy parameter
+              optimizer='adam',
+              metrics=['accuracy'])
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+```
+
+## 8.2 Convolutional NN models
+
+Cleaning Data, Scaling features, Train/Test Split could be needed before building the model.
+
+### 8.2.1 Regression
+
+```python
+from tensorflow.keras import Sequential, layers
+
+#Init model
+
+model = Sequential()
+
+# First convolution & max-pooling
+model.add(layers.Conv2D(16, (4,4), strides=(2,2), input_shape=(28, 28, 1), activation='relu', padding='same')) ## Define neurones/filter, kernel_matrix, strides, input_shape, activation, padding 
+model.add(layers.MaxPool2D(pool_size=(2,2))) ## Pool size for the MaxPooling. Could call an Average Pool function instead of max
+
+# Second convolution & max-pooling
+model.add(layers.Conv2D(32, (3,3), strides=(2,2), activation='relu', padding='same'))
+model.add(layers.MaxPool2D(pool_size=(2,2)))
+
+# Flattening
+model.add(layers.Flatten())  ## Flatten the previous output 
+
+# One fully connected
+model.add(layers.Dense(100, activation='relu'))  ## First connected layer/Hidden Layer
+
+# Last layer (let's say a regression with 1 target/output) 
+model.add(layers.Dense(1, activation='linear'))  ## Final Output layer of the model
+
+#Compile model
+model.compile(loss='mse',          # The loss is calculated with the MSE function
+              optimizer='adam',    # Adam optimizer is the default prefered optimizer for this task.
+              metrics=['mae'])     # Mean Absolute Error is metric of the model "accuracy"
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+
+```
+
+### 8.2.2 Classification (2 Classes)
+
+```python
+
+#Init model
+
+from tensorflow.keras import Sequential, layers
+
+model = Sequential()
+
+# First convolution & max-pooling
+model.add(layers.Conv2D(16, (4,4), strides=(2,2), input_shape=(28, 28, 1), activation='relu', padding='same')) ## Define neurones/filter, kernel_matrix, strides, input_shape, activation, padding 
+model.add(layers.MaxPool2D(pool_size=(2,2))) ## Pool size for the MaxPooling. Could call an Average Pool function instead of max
+
+# Second convolution & max-pooling
+model.add(layers.Conv2D(32, (3,3), strides=(2,2), activation='relu', padding='same'))
+model.add(layers.MaxPool2D(pool_size=(2,2)))
+
+# Flattening
+model.add(layers.Flatten())  ## Flatten the previous output 
+
+# One fully connected
+model.add(layers.Dense(100, activation='relu'))  ## First connected layer/Hidden Layer
+
+# Last layer (let's say a regression with 1 target/output) 
+model.add(layers.Dense(1, activation='sigmoid')) # Activation could be softmax with 2 neurones.
+
+#Compile model
+model.compile(loss='binary_crossentropy',  # The loss is calculated with the binary_crossentropy parameter
+              optimizer='adam',            
+              metrics=['accuracy'])
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+
+```
+
+### 8.2.3 Multi-Classification (more than 2 Classes)
+
+```python
+
+#Init model
+
+from tensorflow.keras import Sequential, layers
+
+model = Sequential()
+
+# First convolution & max-pooling
+model.add(layers.Conv2D(16, (4,4), strides=(2,2), input_shape=(28, 28, 1), activation='relu', padding='same')) ## Define neurones/filter, kernel_matrix, strides, input_shape, activation, padding 
+model.add(layers.MaxPool2D(pool_size=(2,2))) ## Pool size for the MaxPooling. Could call an Average Pool function instead of max
+
+# Second convolution & max-pooling
+model.add(layers.Conv2D(32, (3,3), strides=(2,2), activation='relu', padding='same'))
+model.add(layers.MaxPool2D(pool_size=(2,2)))
+
+# Flattening
+model.add(layers.Flatten())  ## Flatten the previous output 
+
+# One fully connected
+model.add(layers.Dense(100, activation='relu'))  ## First connected layer/Hidden Layer
+
+# Final Output layer
+model.add(layers.Dense(5, activation='softmax')) # Number of neurones correspond to the number of categorical values to classify
+
+#Compile model
+model.compile(loss='categorical_crossentropy',   # The loss is calculated with the categorical_crossentropy parameter
+              optimizer='adam',
+              metrics=['accuracy'])
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+```
+
+## 8.3 Reccurent NN models
+
+Cleaning Data, Scaling features, Padding values, Train/Test Split could be needed before building the model.
+
+### 8.3.1 Regression
+
+```python
+from tensorflow.keras import Sequential, layers
+
+
+#Init model
+
+model = Sequential()
+
+
+# Choosing LTSM or GRU or both...
+
+########################
+###       LSTM       ###
+########################
+model.add(layers.Masking(mask_value=0.))             ## Adding mask if padding values (shoul correspond to value inputed in padding)
+model.add(layers.LSTM(units=20, activation='tanh'))  # !!! USE 'TANH' BY DEFAULT RATHER THAN 'RELU'
+
+
+########################
+###       GRU        ###
+########################
+model.add(layers.GRU(units=27, activation='tanh'))
+model.add(layers.Masking(mask_value=0.))                 ## Adding mask if padding values (shoul correspond to value inputed in padding)
+
+# Last layer (let's say a regression with 1 target/output) 
+model.add(layers.Dense(1, activation='linear'))  ## Final Output layer of the model.
+
+#Compile model
+model.compile(loss='mse',            # The loss is calculated with the MSE function
+              optimizer='rmsprop',   # Here, by default, use 'rmsprop' rather than 'adam'
+              metrics=['mae'])       # Mean Absolute Error is metric of the model "accuracy"
+
+
+
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+
+```
+
+### 8.3.2 Classification (2 Classes)
+
+```python
+
+#Init model
+
+from tensorflow.keras import Sequential, layers
+
+model = Sequential()
+
+# Choosing LTSM or GRU or both...
+
+########################
+###       LSTM       ###
+########################
+model.add(layers.Masking(mask_value=0.))             ## Adding mask if padding values (shoul correspond to value inputed in padding)
+model.add(layers.LSTM(units=20, activation='tanh'))  # !!! USE 'TANH' BY DEFAULT RATHER THAN 'RELU'
+
+
+########################
+###       GRU        ###
+########################
+model.add(layers.GRU(units=27, activation='tanh'))
+model.add(layers.Masking(mask_value=0.))                 ## Adding mask if padding values (shoul correspond to value inputed in padding)
+
+
+# Last layer (let's say a regression with 1 target/output) 
+model.add(layers.Dense(1, activation='sigmoid'))        # This layer depends on your task, as usual
+
+#Compile model
+model.compile(loss='binary_crossentropy',  # The loss is calculated with the binary_crossentropy parameter
+              optimizer='rmsprop',         # Here, by default, use 'rmsprop' rather than 'adam'
+              metrics=['accuracy'])
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+
+```
+
+### 8.3.3 Multi-Classification (more than 2 Classes)
+
+```python
+
+#Init model
+
+from tensorflow.keras import Sequential, layers
+
+model = Sequential()
+
+# Choosing LTSM or GRU or both...
+
+########################
+###       LSTM       ###
+########################
+model.add(layers.Masking(mask_value=0.))             ## Adding mask if padding values (shoul correspond to value inputed in padding)
+model.add(layers.LSTM(units=20, activation='tanh'))  # !!! USE 'TANH' BY DEFAULT RATHER THAN 'RELU'
+
+
+########################
+###       GRU        ###
+########################
+model.add(layers.GRU(units=27, activation='tanh'))
+model.add(layers.Masking(mask_value=0.))                 ## Adding mask if padding values (shoul correspond to value inputed in padding)
+
+# Last layer (let's say a regression with 1 target/output) 
+model.add(layers.Dense(10, activation='softmax')) # This layer depends on your task, as usual
+
+#Compile model
+model.compile(loss='categorical_crossentropy',   # The loss is calculated with the categorical_crossentropy parameter
+              optimizer='rmsprop',               # Here, by default, use 'rmsprop' rather than 'adam'
+              metrics=['accuracy'])
+
+#Fit model
+from tensorflow.keras.callbacks import EarlyStopping                  ## import EarlyStopping if wanted to stop before all the epochs iterations.
+es = EarlyStopping(patience=5, restore_best_weights=True, verbose=1)  ## define the number of patience (retries before stopping the iteration epohcs) 
+
+
+model.fit(X_train,                ## doing the fit on the train data
+          y_train,                ## doing the fit on the train data
+          validation_split=0.3,   ## Validation set (here split the 30% of the train data)
+          epochs=100,             ## Number of epochs to iterate (the EarlyStopping should stop before arriving at the end if find optimum acu)
+          batch_size=16,          ## Number of batch size. Slice the data to adjust weights
+          callbacks = [es])       ## Calling EarlyStopping
+
+#Evaluate the model
+model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+
+
+# 9. Data Sourcing
+## 9.1 API
 
 ```python
 import requests
@@ -194,7 +614,7 @@ params = {
 response = requests.get(BASE_URI+path, params).json()
 ```
 
-## 8.2 Web Scraping
+## 9.2 Web Scraping
 
 ```python
 import requests
@@ -227,9 +647,6 @@ for book in soup.find_all("article", class_="product_pod"):
 
 import json
 check_values = {col:df[col].value_counts().tolist() for col in df.columns} ## the DataFrame is called 'df' here
-
-#for col in df.columns:
-#    print(f"Col : {col} \n {df[col].value_counts()}")
 
 with open('check_values.json', 'w') as outfile:
     json.dump(check_values, outfile)
