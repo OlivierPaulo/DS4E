@@ -597,6 +597,7 @@ model.fit(X_train,                ## doing the fit on the train data
 
 #Evaluate the model
 model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
+```
 
 
 # 9. Data Sourcing
