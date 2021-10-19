@@ -468,7 +468,7 @@ model.fit(X_train,                ## doing the fit on the train data
 model.evaluate(X_test, y_test, verbose=1)  ## Evaluate the model with the test set
 ```
 
-## 8.3 Reccurent NN models
+## 8.3 Recurrent NN models
 
 Cleaning Data, Scaling features, Padding values, Train/Test Split could be needed before building the model.
 
